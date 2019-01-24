@@ -83,7 +83,7 @@ class Character(object):
 class ActorFactory(object):
     db = object()
     Actors_dictionary = {
-        "character": Character,
+        "person": Character,
         "animal": Animal
     }
 
