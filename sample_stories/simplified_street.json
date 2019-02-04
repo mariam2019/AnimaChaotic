@@ -1,0 +1,45 @@
+{
+
+"scene_nodes":
+[
+  {"scene_tag":"street",
+   "weather":"cloudy",
+   "time":"none",
+   "static_objects": [],
+   "dynamic_objects":[],
+   
+   "Actors":[
+
+     {"id":9,"type":"person","subtype":"boy","properties":
+     {"haircolor":"none","emotion":"happy"}},
+     {"id":10,"type":"person","subtype":"boy","properties":null}
+   ],
+   "initial_constrains":
+      [{"type":"beside","first":11,"second":3},
+       {"type":"beside","first":8,"second":7},
+       {"type":"beside","first":2,"second":7},
+       {"type":"beside","first":9,"second":10}
+       ],
+   
+   "subscenes":
+   [
+
+    {
+      
+        "actions":[
+        {"type":"one_actor","sub_type":"wander","actor_id":9,"properties":null}
+          
+         ]
+      
+      
+    }
+     
+     
+   ]
+
+   
+  }
+  
+]
+
+}

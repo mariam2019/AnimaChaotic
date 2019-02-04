@@ -1,4 +1,4 @@
-from pymongo import mongo_client
+from pymongo import MongoClient
 
 db = object()
 
@@ -13,11 +13,18 @@ class DataBaseManager(object):
     def connect(self):
         global db
         try:
-            client = mongo_client(self.connection_string)
+            client = MongoClient(self.connection_string)
+
         except:
             print("Failed to connect to the database")
+            raise
 
         db = client["models"]
+
+def get_database():
+    return db
+
+
 
        # return self.client["models"]
 

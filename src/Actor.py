@@ -1,11 +1,12 @@
 from direct.actor.Actor import Actor
 from collections import namedtuple
-from src.DataBaseManager import db
+from src.DataBaseManager import get_database
 import os
+from panda3d.ai import *
 
 
-DEFAULTCHARACTER = "../../models/dummy.egg"
-DEFAULTANIMAL = "../../models/dummy.egg"
+DEFAULTCHARACTER = "../models/dummy.egg"
+DEFAULTANIMAL = "../models/dummy.egg"
 
 
 # def Character1(): #temporary may be deleted
@@ -41,49 +42,75 @@ DEFAULTANIMAL = "../../models/dummy.egg"
 #         self.model.setScale(*scale)
 
 
-class Animal(object):
+class BaseActor(object):
+
+    def __init__(self):
+
+        self.model =object()
+    def reparent(self,scene):
+        self.model.reparentTo(scene)
+
+    def set_pos(self,pos):
+        self.model.setPos(-100,400, -100)
+
+    def set_scale(self,scale):
+        self.model.setScale(10,10,10)
+
+
+class Animal(BaseActor):
 
     def __init__(self, actor):
-        a = namedtuple("actor", actor.keys(), *actor.values())
+        a = namedtuple("actor", actor.keys())(*actor.values())
         self.id = a.id
         self.type = a.subtype
         self.properties = a.properties
-
+        db = get_database()
         animal = db.animals.find_one(
             {"type": self.type})  # TODO: Add checks if the model is not found retrieve default model
 
-        temp_path =os.path.join("../../models/animals", animal.modelname + ".egg.pz") #TODO : may change the extension to egg
+        temp_path =os.path.join("../models/animals", animal.modelname) #TODO : may change the extension to egg
 
         self.modelpath = temp_path if os.path.exists(temp_path) else DEFAULTANIMAL
         #TODO : Add a check if the animation is not loaded correctly
         self.animations = dict(
-            [(anim, os.path.join("../../models/animals", "%s_%s.egg.pz".format(animal.modelname, anim))) for anim in
-             animal.animations])
+            [(anim, os.path.join("../models/animals", "%s_%s"%(animal["modelname"], anim))) for anim in
+             animal["animations"]])
         self.model = Actor(self.modelpath, self.animations)
 
 
-class Character(object):
+class Character(BaseActor):
 
     def __init__(self, actor):
-        a = namedtuple("actor", actor.keys(), *actor.values())
+
+        a = namedtuple("actor", actor.keys())(*actor.values())
+
+        db = get_database()
+
         self.id = a.id
         self.type = a.subtype
         self.properties = a.properties
 
-        character = db.characters.find_one(
-            {"type": self.type})  # TODO: Add checks if the model is not found retrieve default model
+        character = db.characters.find_one({"type": self.type})  # TODO: Add checks if the model is not found retrieve default model
 
-        self.modelpath = os.path.join("../../models/characters", character.modelname + ".egg.pz")
+
+        self.modelpath = os.path.join("../models/characters", character['modelname'])
         self.animations = dict(
-            [(anim, os.path.join("../../models/characters", "%s_%s.egg.pz".format(character.modelname, anim))) for anim in
-             character.animations])
+            [(anim, os.path.join("../models/characters", ("%s_%s"%(character['modelname'],anim)))) for anim in
+             character['animations']])
+        print(self.animations)
         self.model = Actor(self.modelpath, self.animations)
+        #TODO : Adjust poisition and scale outside of this function
+        self.model.setScale(10,10,10)
+        self.model.setPos(-100,400,-100)
+        self.AIchar = AICharacter(str(self.id),self.model,100, 500,5)
+
+
 
 
 class ActorFactory(object):
-    db = object()
+
     Actors_dictionary = {
-        "character": Character,
+        "person": Character,
         "animal": Animal
     }
 

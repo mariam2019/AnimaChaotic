@@ -1,0 +1,63 @@
+{
+
+"scene_nodes":
+[
+  {"scene_tag":"street",
+   "weather":"none",
+   "time":"none",
+   "static_objects": [{"id":1,"type":"traffic_light"},{"id":2,"type":"garbage_tin"},{"id":3,"type":"tree"},{"id":4,"type":"tree"}],
+   "dynamic_objects":[
+     {"id":5,"type":"car","animation":"run","properties":{"color":"red"}}
+     ,{"id":6,"type":"car","animation":"run","properties":{"color":"blue"}}
+   ],
+   
+   "Actors":[
+     {"id":7,"type":"animal","subtype":"dog",
+      "properties":{"species":"bulldog"}},
+     {"id":8,"type":"person","subtype":"girl","properties":{"haircolor":"brown","emotion":"happy"}},
+     {"id":9,"type":"person","subtype":"boy","properties":
+     {"haircolor":"none","emotion":"happy"}},
+     {"id":10,"type":"person","subtype":"boy","properties":null},
+     {"id":11,"type":"animal","subtype":"cat","properties":null}
+   ],
+   "initial_constrains":
+      [{"type":"beside","first":11,"second":3},
+       {"type":"beside","first":8,"second":7},
+       {"type":"beside","first":2,"second":7},
+       {"type":"beside","first":9,"second":10}
+       ],
+   
+   "subscenes":
+   [
+    {
+      "actions":[
+        {"type":"one_actor","sub_type":"look_at","actor_id":7,"acted_upon":11,"properties":null},
+        {"type":"sound","sub_type":"bark","actor_id":7,"properties":null},
+        {"type":"one_actor", "sub_type":"wander","actor_id":9,"properties":null},
+           {"type":"one_actor", "sub_type":"wander","actor_id":10,"properties":null},
+           {"type":"sound", "sub_type":"say","actor_id":9,
+           "properties":{"text":"hello! how are you ?"}
+           }
+             ]
+    },
+    {
+      
+        "actions":[
+        {"type":"two_actor","sub_type":"run_towards","actor_id":7,"acted_upon":11,"properties":null},
+           {"type":"sound", "sub_type":"say","actor_id":10,
+           "properties":{"text":"I am fine. Thank you"}
+           }
+             ]
+      
+      
+    }
+     
+     
+   ]
+
+   
+  }
+  
+]
+
+}
