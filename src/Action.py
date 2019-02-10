@@ -1,5 +1,6 @@
-from direct.interval.MetaInterval import Sequence
+from direct.interval.MetaInterval import Sequence, Vec3
 from direct.task import Task
+from panda3d.core import Point3
 
 
 class Action(object):
@@ -60,12 +61,26 @@ class run_towards(TwoActorActions):
     #TODO : Implement action
     def play_action(self):
 
-        AIbehaviors = self.actor.AIchar.getAiBehaviors()
-        AIbehaviors.seek(self.acted_upon.model)
+        # AIbehaviors = self.actor.AIchar.getAiBehaviors()
+        # AIbehaviors.seek(self.acted_upon.model)
+
         self.actor.model.loop("run")
-        self.actorPos = self.actor.model.getPos()
-        self.modelPos = self.acted_upon.model.getPos()
-       # self.task_Mgr.add(self.stop_task)
+        # This lets the actor move to point 10, 10, 10 in 1.0 second.
+        myInterval1 =  self.actor.model.posInterval(1.0, Point3(-200, 400, -100))
+
+        # This move takes 2.0 seconds to complete.
+        myInterval2 =  self.actor.model.posInterval(2.0, Point3(0, 400, -100))
+
+        # # You can specify a starting position, too.
+        # myInterval3 =  self.actor.player_node.posInterval(1.0, Point3(2, -3, 8), startPos=Point3(2, 400, 1))
+
+        # This rotates the actor 180 degrees on heading and 90 degrees on pitch.
+        myInterval4 =  self.actor.model.hprInterval(1.0, Vec3(180, 90, 0))
+        # self.actorPos = self.actor.model.getPos()
+        # self.modelPos = self.acted_upon.model.getPos()
+        #self.task_Mgr.add(self.stop_task)
+        seq =Sequence(myInterval1,myInterval4,myInterval4)
+        seq.start()
 
 
 
@@ -73,8 +88,8 @@ class run_towards(TwoActorActions):
     def stop_task(self,task):
 
 
-        if self.actorPos.x == self.modelPos.x and self.actorPos.y == self.modelPos.y:
-            self.actor.model.stop()
+        # if self.actorPos.x == self.modelPos.x and self.actorPos.y == self.modelPos.y:
+        #     self.actor.model.stop()
 
         return Task.cont
 

@@ -5,8 +5,8 @@
   {"scene_tag":"street",
    "weather":"cloudy",
    "time":"none",
-   "static_objects": [],
-   "dynamic_objects":[],
+   "static_objects": [{"id":1,"type":"traffic_light"}],
+   
    
    "Actors":[
 
@@ -27,7 +27,7 @@
     {
       
         "actions":[
-        {"type":"one_actor","sub_type":"wander","actor_id":9,"properties":null}
+        {"type":"two_actor","sub_type":"run_towards","actor_id":9,"acted_upon":1,"properties":null}
           
          ]
       

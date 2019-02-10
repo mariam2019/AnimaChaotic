@@ -4,7 +4,7 @@ from src.DataBaseManager import DataBaseManager as db_manager
 import traceback
 
 #FILENAME = "../../sample_stories/street_story_json.json"
-FILENAME = "../../sample_stories/simplified_street.json"
+FILENAME = "../sample_stories/simplified_street.json"
 
 
 if __name__=="__main__":
