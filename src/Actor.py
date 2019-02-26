@@ -6,7 +6,7 @@ from collections import namedtuple
 from panda3d.bullet import BulletCapsuleShape, ZUp, BulletCharacterControllerNode, BulletRigidBodyNode
 from panda3d.core import BitMask32
 
-from src.DataBaseManager import get_database
+from DataBaseManager import get_database
 import os
 from panda3d.ai import *
 
@@ -187,6 +187,11 @@ class BaseActor(object):
 
 
         models = [model for model in db.objects.find({"type":self.subtype})]
+        #MARIAM ZWDT L 7TA DE YA REEM
+        self.alone=False
+        if self.subtype == "car":
+            self.alone=True
+
         #check if models exist otherwise load dummy actor
         if len(models)>0:
             print(len(models))
@@ -197,9 +202,10 @@ class BaseActor(object):
 
 
             model_animations = model_choice["animations"]
-            self.boundingX = model_choice["boundingX"]
-            self.boundingY = model_choice["boundingY"]
-            self.boundingZ = model_choice["boundingZ"]
+
+            self.boundingX = float(model_choice["boundingX"])
+            self.boundingY = float(model_choice["boundingY"])
+            self.boundingZ = float(model_choice["boundingZ"])
         else:
             directory_path,self.model_name,model_animations = get_default_model(self.type)
 
@@ -207,13 +213,16 @@ class BaseActor(object):
             self.boundingY = 1.0
             self.boundingZ = 1.0
 
-        self.model_path = os.path.join(directory_path,self.model_name)
+        self.model_path =directory_path #os.path.join(directory_path,self.model_name)
         self.animations = dict(
             [(anim, os.path.join(directory_path, ("%s_%s"%(self.model_name,anim)))) for anim in
              model_animations])
         print(self.animations)
 
-        self.model = Actor(self.model_path, self.animations)
+        if self.animations:
+            self.model = Actor(self.model_path, self.animations)
+        else:
+            self.model = Actor(self.model_path)
         print("my model")
 
         #TODO : Adjust poisition and scale outside of this function
@@ -224,11 +233,29 @@ class BaseActor(object):
     def reparent(self,obj):
         self.model.reparentTo(obj)
 
-    def set_pos(self,pos):
+    def set_pos(self,pos1,pos2,pos3):
         #self.model.setPos(-100,400, -100)
-        self.model.setPos(pos)
+        print ("mmmmmmmmmmmmkkkkkkkkkkk",pos1,pos2,pos3)
+        self.model.setPos(pos1,pos2,pos3)
+
+     #MARIAM ZWDT L 7TA DE KMAN YA REEM
+    def GETalone(self):
+        return self.alone
+
+    def GETboundingX(self):
+        return self.boundingX
+
+    def GETboundingY(self):
+        return self.boundingY
+
+    def GETboundingZ(self):
+        return self.boundingZ
 
     def set_scale(self,scale):
         #self.model.setScale(10,10,10)
         self.model.setScale(scale)
+        self.boundingX*=scale
+        self.boundingY*=scale
+        self.boundingZ*=scale
 
+######################################
